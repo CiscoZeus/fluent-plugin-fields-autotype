@@ -1,13 +1,13 @@
 require 'fluent/test'
-require 'fluent/plugin/out_fields_parser'
+require 'fluent/plugin/out_fields_autotype'
 
-class FieldsParserOutputTest < Test::Unit::TestCase
+class FieldsAutotypeOutputTest < Test::Unit::TestCase
   def setup
     Fluent::Test.setup
   end
 
   def create_driver(conf='', tag='orig.test.tag')
-    Fluent::Test::OutputTestDriver.new(Fluent::OutputFieldsParser, tag).configure(conf)
+    Fluent::Test::OutputTestDriver.new(Fluent::OutputFieldsAutotype, tag).configure(conf)
   end
 
   def test_config_defaults
@@ -233,9 +233,9 @@ class FieldsParserOutputTest < Test::Unit::TestCase
   end
 
 def test_strict_key_value
-  d = create_driver("strict_key_value true")
+  d = create_driver()
 
-  orig_message = %{msg="Audit log" user=Johnny action="add-user" dontignore=don't-ignore-this result=success iVal=23 fVal=1.02 bVal=true}
+  orig_message = %{msg=Auditlog user=Johnny action=add-user dontignore=don't-ignore-this result=success iVal=23 fVal=1.02 bVal=true}
   d.run do
     d.emit({'message' => orig_message})
     d.emit({'message' => 'a'})
@@ -247,7 +247,7 @@ def test_strict_key_value
   assert_equal(
     {
       'message' => orig_message,
-      "msg"=>"Audit log",
+      "msg"=>"Auditlog",
       'user' => "Johnny",
       'action' => 'add-user',
       'dontignore' => "don't-ignore-this",

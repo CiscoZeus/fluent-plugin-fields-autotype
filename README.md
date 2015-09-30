@@ -13,7 +13,7 @@ Use RubyGems:
 ## Configuration
 
     <match pattern>
-        type                fields_parser
+        type                fields_autotype
 
         remove_tag_prefix   raw
         add_tag_prefix      parsed
@@ -42,7 +42,7 @@ then you will get a new record:
 For configuration
 
     <match pattern>
-        type        fields_parser
+        type        fields_autotype
 
         parse_key   log_message
     </match>
@@ -54,7 +54,7 @@ it parses key "log_message" instead of default key `message`.
 Configuration
 
     <match pattern>
-        type        fields_parser
+        type        fields_autotype
 
         parse_key   log_message
         fields_key  fields
@@ -86,7 +86,7 @@ You can define custom pattern (regexp) for seaching keys/values. Data type like 
 Configuration
 
     <match pattern>
-        type        fields_parser
+        type        fields_autotype
 
         pattern     (\w+):(\S+)
     </match>
@@ -109,7 +109,7 @@ it returns:
 You cat add and/or remove tag prefix using Configuration parameters
 
     <match pattern>
-        type                fields_parser
+        type                fields_autotype
 
         remove_tag_prefix   raw
         add_tag_prefix      parsed
