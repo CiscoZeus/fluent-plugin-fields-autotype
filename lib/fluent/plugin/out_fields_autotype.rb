@@ -1,16 +1,23 @@
-require "logfmt"
+class String
+  def is_i?
+    /\A[-+]?\d+\z/ === self
+  end 
+  def nan?
+    self !~ /^\s*[+-]?((\d+_?)*\d+(\.(\d+_?)*\d+)?|\.(\d+_?)*\d+)(\s*|([eE][+-]?(\d+_?)*\d+)\s*)$/
+  end    
+end
 
 module Fluent
-  class OutputFieldsParser < Fluent::Output
-    Fluent::Plugin.register_output('fields_parser', self)
+  class OutputFieldsAutotype < Fluent::Output
+    Fluent::Plugin.register_output('fields_autotype', self)
 
     config_param :remove_tag_prefix,  :string, :default => nil
     config_param :add_tag_prefix,     :string, :default => nil
     config_param :parse_key,          :string, :default => 'message'
     config_param :fields_key,         :string, :default => nil
     config_param :pattern,            :string,
-                 :default => %{([a-zA-Z_]\\w*)=((['"]).*?(\\3)|[\\w.@$%/+-]*)}
-    config_param :strict_key_value,  :bool, :default => false
+                 :default => %{(\S+)=(\S+)}
+
 
     def compiled_pattern
       @compiled_pattern ||= Regexp.new(pattern)
@@ -42,23 +49,22 @@ module Fluent
       source = record[parse_key].to_s
       target = fields_key ? (record[fields_key] ||= {}) : record
 
-      if strict_key_value
-        # Use logfmt to parse it (key=value)
-        parsed = Logfmt.parse(source)
-        target.merge!(parsed)
-      else
-        source.scan(compiled_pattern) do |match|
-          (key, value, begining_quote, ending_quote) = match
-          next if key.nil?
-          next if target.has_key?(key)
-          value = value.to_s
-          from_pos = begining_quote.to_s.length
-          to_pos = value.length - ending_quote.to_s.length - 1
-          target[key] = value[from_pos..to_pos]
+      reduced_source = source.dup
+      until reduced_source.length == 0 do
+        match1 = reduced_source.match pattern
+        key = match1[1].to_s
+        val = match1[2].to_s
+        if val.is_i?
+          target[key] = val.to_i
+        elsif val.nan?
+          target[key] = val
+        else
+          target[key] = val.to_f
         end
+        reduced_source = reduced_source[match1.offset(2)[1]..-1]
       end
-
       return record
     end
   end
 end
+

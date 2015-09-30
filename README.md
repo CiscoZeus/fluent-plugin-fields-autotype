@@ -2,7 +2,7 @@ fluent-plugin-fields-autotype
 ===========================
 
 Fluent output filter plugin for parsing key/value fields in records
-based on &lt;key>=&lt;value> pattern. Automatically determines the data type of the key.
+based on &lt;key>=&lt;value> pattern. Automatically determines the data type of the value (string, integer or float).
 
 ## Installation
 
@@ -30,8 +30,8 @@ then you will get a new record:
 
 ```
 {
-    "message": "Audit log username=Johny action='add-user' result=success",
-    "user": "Johny",
+    "message": "Audit log username=Johny action=add-user result=success",
+    "username": "Johny",
     "action": "add-user",
     "result": "success"
 }
@@ -64,7 +64,7 @@ For input like:
 
 ```
 {
-    "log_message": "Audit log username=Johny action='add-user' result=success",
+    "log_message": "Audit log username=Johny action=add-user result=success",
 }
 ```
 
