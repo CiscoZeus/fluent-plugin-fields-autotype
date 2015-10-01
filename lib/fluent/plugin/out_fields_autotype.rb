@@ -16,7 +16,7 @@ module Fluent
     config_param :parse_key,          :string, :default => 'message'
     config_param :fields_key,         :string, :default => nil
     config_param :pattern,            :string,
-                 :default => %{(\S+)=(\S+)}
+                 :default => %{(\\S+)=(\\S+)}
 
 
     def compiled_pattern
@@ -52,16 +52,22 @@ module Fluent
       reduced_source = source.dup
       until reduced_source.length == 0 do
         match1 = reduced_source.match pattern
-        key = match1[1].to_s
-        val = match1[2].to_s
-        if val.is_i?
-          target[key] = val.to_i
-        elsif val.nan?
-          target[key] = val
+        if !(match1.nil?)
+          key = match1[1].to_s
+          val = match1[2].to_s
+          if !(target.has_key?(key))
+            if val.is_i?
+              target[key] = val.to_i
+            elsif val.nan?
+              target[key] = val
+            else
+              target[key] = val.to_f
+            end
+          end
+          reduced_source = reduced_source[match1.offset(2)[1]..-1]
         else
-          target[key] = val.to_f
+          reduced_source = ""
         end
-        reduced_source = reduced_source[match1.offset(2)[1]..-1]
       end
       return record
     end

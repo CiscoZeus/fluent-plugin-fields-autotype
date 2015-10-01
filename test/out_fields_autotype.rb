@@ -28,9 +28,8 @@ class FieldsAutotypeOutputTest < Test::Unit::TestCase
       {
         'message' => orig_message,
         'other_key' => %{ test2 a=b },
-        'num' => '-56.7',
+        'num' => -56.7,
         'tok' => 'abc%25',
-        'null' => '',
       },
       emits[0][2]
     )
@@ -52,8 +51,8 @@ class FieldsAutotypeOutputTest < Test::Unit::TestCase
     assert_equal(
       {
         'message' => orig_message,
-        'dq' => "asd ' asd +3",
-        'sq' => 'as " s " 4',
+        'dq' => "\"asd",
+        'sq' => "'as",
         's' => 'yu'
       },
       emits[0][2]
@@ -90,7 +89,7 @@ class FieldsAutotypeOutputTest < Test::Unit::TestCase
     assert_equal(
       {
         'message' => orig_message,
-        'a' => '77',
+        'a' => 77,
         'e' => nil,
       },
       emits[0][2]
@@ -195,7 +194,7 @@ class FieldsAutotypeOutputTest < Test::Unit::TestCase
       {
         'message' => orig_message,
         'output-key' => {
-          'num' => '-56.7',
+          'num' => -56.7,
           'tok' => 'abc%25',
           'message' => 'a+b',
         }
@@ -219,8 +218,8 @@ class FieldsAutotypeOutputTest < Test::Unit::TestCase
     assert_equal(
       {
         'message' => orig_message,
-        'a' => '44',
-        'bbb' => '999',
+        'a' => 44,
+        'bbb' => 999,
       },
       emits[0][2]
     )
