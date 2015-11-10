@@ -8,7 +8,7 @@ based on configurable patterns. Automatically determines the data type of the va
 
 Use RubyGems:
 
-    gem install fluent-plugin-fields-autotype
+    td-agent-gem install fluent-plugin-fields-autotype
 
 ## Configuration
 
