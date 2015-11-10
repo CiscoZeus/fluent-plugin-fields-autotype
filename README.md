@@ -2,7 +2,7 @@ fluent-plugin-fields-autotype
 ===========================
 
 Fluent output filter plugin for parsing key/value fields in records
-based on configurable patterns. Automatically determines the data type of the value (string, integer or float).
+based on configurable patterns. This plugin is a fork of tomas-zemres/fluent-plugin-fields-parser. We extend that plugin to automatically determine the data type of the value (string, integer or float).
 
 ## Installation
 
