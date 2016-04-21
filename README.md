@@ -23,7 +23,7 @@ Use RubyGems:
 If following record is passed:
 
 ```
-{"message": "Audit log user=Johny action=add-user result=success" }
+{"message": "Audit log username=Johny action=add-user result=success" }
 ```
 
 then you will get a new record:
